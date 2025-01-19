@@ -242,12 +242,10 @@ main :: proc() {
   layout_allocator := virtual.arena_allocator(&layout_arena)
   root : Screen
 
-  start := time.now()
+  start := time.tick_now()
 
   for {
-    now := time.now()
-    app.dt = time.duration_seconds(time.diff(start, now))
-    start = now
+    app.dt = time.duration_seconds(time.tick_lap_time(&start))
 
     poll_events(&app) or_break
 
