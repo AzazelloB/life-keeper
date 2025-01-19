@@ -45,7 +45,9 @@ init :: proc(app : ^App) {
     sdl.WINDOWPOS_CENTERED,
     1280,
     720,
-    { .SHOWN, .RESIZABLE }
+    { .SHOWN, .RESIZABLE, .ALLOW_HIGHDPI }
+    // NOTE: For .ALLOW_HIGHDPI On macOS NSHighResolutionCapable must be set true
+    // in the application's Info.plist for this to have any effect.
   )
 
   if app.window == nil {
@@ -60,7 +62,7 @@ init :: proc(app : ^App) {
       os.exit(1)
   }
 
-  app.font = ttf.OpenFontDPI("./assets/Martian_Mono/MartianMono-VariableFont_wdth,wght.ttf", 24, 300, 300)
+  app.font = ttf.OpenFont("./assets/Martian_Mono/MartianMono-VariableFont_wdth,wght.ttf", 32)
 }
 
 cleanup :: proc(app : ^App) {

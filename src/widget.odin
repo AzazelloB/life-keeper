@@ -88,15 +88,15 @@ get_layout :: proc(app : ^App, layout_allocator : mem.Allocator) -> Screen {
             Button {
               component = Text { "Button", { 255, 255, 255, 255 } }
             },
-            Button {
-              component = Container {
-                components = {
-                  Text { ">", { 255, 255, 255, 255 } },
-                  Text { "Click", { 255, 255, 255, 255 } },
-                }
-              }
-            },
-            Button {},
+            // Button {
+            //   component = Container {
+            //     components = {
+            //       Text { ">", { 255, 255, 255, 255 } },
+            //       Text { "Click", { 255, 255, 255, 255 } },
+            //     }
+            //   }
+            // },
+            // Button {},
           }
         }
       },

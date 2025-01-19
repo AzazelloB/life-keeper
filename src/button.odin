@@ -10,8 +10,7 @@ draw_button :: proc(app : ^App, button : ^Button, bounds : ^sdl.Rect, position :
   // TODO use glyphs
   // TODO stop rendering text inside button,
   // contents of button should be handleled as any other component
-  // text := create_text(app, button.text, 0.3)
-  text := create_text(app, "Text", 0.3)
+  text := create_text(app, button.component.(Text).text)
 
   PADDING_X :: 20
   PADDING_Y :: 15
