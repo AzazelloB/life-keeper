@@ -70,13 +70,7 @@ draw_button :: proc(app : ^App, button : Button, bounds : ^sdl.Rect, position : 
     // button.animation_progress = 1
   }
 
-  sdl.SetRenderDrawColor(
-    app.renderer,
-    button.color.r,
-    button.color.g,
-    button.color.b,
-    button.color.a,
-  )
+  sdl.SetRenderDrawColor(app.renderer, expand_values(button.color))
 
   THICKNESS :: 3
 

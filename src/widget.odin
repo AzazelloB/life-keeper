@@ -84,8 +84,8 @@ get_layout :: proc(app : ^App, layout_allocator : mem.Allocator) -> Window {
     bounds = { 0, 0, app.window_width, app.window_height },
     widgets = {
       {
-        max_width = 200,
-        // width = .3,
+        // max_width = 200,
+        width = .3,
         height = 1,
         anchor = .LEFT_CENTER,
         component = List {
@@ -94,11 +94,29 @@ get_layout :: proc(app : ^App, layout_allocator : mem.Allocator) -> Window {
           space = 5,
           color = { 200, 140, 0, 255 },
           components = {
+            List {
+              type = .HORIZONTAL,
+              components = {
+                Button {
+                  component = Text { "Home", { 255, 255, 255, 255 } }
+                },
+                Button {
+                  component = Text { "Here", { 255, 255, 255, 255 } }
+                },
+              }
+            },
             Button {
-              component = Text { "Button", { 255, 255, 255, 255 } }
+              component = Text { "Button 1", { 255, 255, 255, 255 } }
+            },
+            Button {
+              component = Text { "Button 2", { 255, 255, 255, 255 } }
+            },
+            Button {
+              component = Text { "Button 3", { 255, 255, 255, 255 } }
             },
             // Button {
-            //   component = Container {
+            //   component = List {
+            //     type = .HORIZONTAL,
             //     components = {
             //       Text { ">", { 255, 255, 255, 255 } },
             //       Text { "Click", { 255, 255, 255, 255 } },

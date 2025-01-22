@@ -128,6 +128,8 @@ prepare_frame :: proc(app : ^App) {
 
 draw_frame :: proc(app : ^App) {
   for widget in app.layout.widgets {
+    bounds : sdl.Rect
+
     switch widget.anchor {
       case .TOP_LEFT: {
         panic("Not Implemented")
@@ -158,29 +160,29 @@ draw_frame :: proc(app : ^App) {
       }
   
       case .LEFT_CENTER: {
-        bounds := sdl.Rect {
+        bounds = {
           x = app.layout.bounds.x,
           y = app.layout.bounds.y,
           w = i32(max(u16(f16(app.layout.bounds.w) * widget.width), widget.max_width)),
           h = i32(max(u16(f16(app.layout.bounds.h) * widget.height), widget.max_height)),
         }
-  
-        switch c in widget.component {
-          case List: {
-            draw_horizontal(app, c, &bounds)
-          }
-
-          case Button: {
-            draw_button(app, c, &bounds)
-          }
-
-          case Text: {
-            panic("Not Implemented")
-          }
-        }
       }
   
       case .CENTER: {
+        panic("Not Implemented")
+      }
+    }
+
+    switch c in widget.component {
+      case List: {
+        draw_list(app, c, &bounds)
+      }
+
+      case Button: {
+        draw_button(app, c, &bounds)
+      }
+
+      case Text: {
         panic("Not Implemented")
       }
     }
