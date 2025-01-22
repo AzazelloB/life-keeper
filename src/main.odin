@@ -18,6 +18,7 @@ App :: struct {
 
   renderer : ^sdl.Renderer,
 
+  layout : Window,
   needs_rerender : bool,
 
   dt : f64,
@@ -78,7 +79,7 @@ cleanup :: proc(app : ^App) {
   delete(app.events)
 }
 
-poll_events :: proc(app : ^App) -> (should_close : bool) {
+poll_events :: proc(app : ^App) -> (window_stay_open : bool) {
   event : sdl.Event
 
   for sdl.PollEvent(&event) {
@@ -125,75 +126,67 @@ prepare_frame :: proc(app : ^App) {
   sdl.SetCursor(sdl.GetDefaultCursor())
 }
 
-draw_frame :: proc(app : ^App, root : ^Screen) {
-  draw_element(app, root)
+draw_frame :: proc(app : ^App) {
+  for widget in app.layout.widgets {
+    switch widget.anchor {
+      case .TOP_LEFT: {
+        panic("Not Implemented")
+      }
+  
+      case .TOP_CENTER: {
+        panic("Not Implemented")
+      }
+  
+      case .TOP_RIGHT: {
+        panic("Not Implemented")
+      }
+  
+      case .RIGHT_CENTER: {
+        panic("Not Implemented")
+      }
+  
+      case .RIGHT_BOTTOM: {
+        panic("Not Implemented")
+      }
+  
+      case .BOTTOM_CENTER: {
+        panic("Not Implemented")
+      }
+  
+      case .BOTTOM_LEFT: {
+        panic("Not Implemented")
+      }
+  
+      case .LEFT_CENTER: {
+        bounds := sdl.Rect {
+          x = app.layout.bounds.x,
+          y = app.layout.bounds.y,
+          w = i32(max(u16(f16(app.layout.bounds.w) * widget.width), widget.max_width)),
+          h = i32(max(u16(f16(app.layout.bounds.h) * widget.height), widget.max_height)),
+        }
+  
+        switch c in widget.component {
+          case List: {
+            draw_horizontal(app, c, &bounds)
+          }
+
+          case Button: {
+            draw_button(app, c, &bounds)
+          }
+
+          case Text: {
+            panic("Not Implemented")
+          }
+        }
+      }
+  
+      case .CENTER: {
+        panic("Not Implemented")
+      }
+    }
+  }
 
   sdl.RenderPresent(app.renderer)
-}
-
-draw_element :: proc(app : ^App, canvas : ^Screen) {
-  for &widget in canvas.widgets {
-    draw_widget(app, &widget, canvas.bounds)
-  }
-}
-
-draw_widget :: proc(app : ^App, widget : ^Widget, bounds : sdl.Rect) {
-  switch widget.anchor {
-    case .TOP_LEFT: {
-      panic("Not Implemented")
-    }
-
-    case .TOP_CENTER: {
-      panic("Not Implemented")
-    }
-
-    case .TOP_RIGHT: {
-      panic("Not Implemented")
-    }
-
-    case .RIGHT_CENTER: {
-      panic("Not Implemented")
-    }
-
-    case .RIGHT_BOTTOM: {
-      panic("Not Implemented")
-    }
-
-    case .BOTTOM_CENTER: {
-      panic("Not Implemented")
-    }
-
-    case .BOTTOM_LEFT: {
-      panic("Not Implemented")
-    }
-
-    case .LEFT_CENTER: {
-      bounds := sdl.Rect {
-        x = bounds.x,
-        y = bounds.y,
-        w = i32(max(u16(f16(bounds.w) * widget.width), widget.max_width)),
-        h = i32(max(u16(f16(bounds.h) * widget.height), widget.max_height)),
-      }
-
-      switch &c in widget.component {
-        case Container: {
-          draw_horizontal(app, &c, &bounds)
-        }
-
-        case Button: {
-          panic("Not Implemented")
-        }
-
-        case Text: {
-          panic("Not Implemented")
-        }
-      }
-    }
-
-    case .CENTER: {
-      panic("Not Implemented")
-    }
-  }
 }
 
 request_rerender :: proc(app : ^App) {
@@ -240,7 +233,6 @@ main :: proc() {
 
   layout_arena: virtual.Arena
   layout_allocator := virtual.arena_allocator(&layout_arena)
-  root : Screen
 
   start := time.tick_now()
 
@@ -252,14 +244,14 @@ main :: proc() {
     if need_rerender(&app) {
       virtual.arena_destroy(&layout_arena)
 
-      root = get_layout(&app, layout_allocator)
+      app.layout = get_layout(&app, layout_allocator)
 
       set_rerender_complete(&app)
     }
 
     prepare_frame(&app)
 
-    draw_frame(&app, &root)
+    draw_frame(&app)
 
     clear_events(&app)
 	}

@@ -6,7 +6,7 @@ Position :: enum {
   CENTER
 }
 
-draw_button :: proc(app : ^App, button : ^Button, bounds : ^sdl.Rect, position : Position = .CENTER) {
+draw_button :: proc(app : ^App, button : Button, bounds : ^sdl.Rect, position : Position = .CENTER) {
   // TODO use glyphs
   // TODO stop rendering text inside button,
   // contents of button should be handleled as any other component
@@ -67,7 +67,7 @@ draw_button :: proc(app : ^App, button : ^Button, bounds : ^sdl.Rect, position :
   if just_pressed(app, &button_bounds) {
     button.callback()
 
-    button.animation_progress = 1
+    // button.animation_progress = 1
   }
 
   sdl.SetRenderDrawColor(

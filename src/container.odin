@@ -2,7 +2,7 @@ package main
 
 import sdl "vendor:sdl2"
 
-draw_horizontal :: proc(app : ^App, container : ^Container, bounds : ^sdl.Rect) {  
+draw_horizontal :: proc(app : ^App, container : List, bounds : ^sdl.Rect) {  
   sdl.SetRenderDrawColor(
     app.renderer,
     container.color.r,
@@ -21,12 +21,12 @@ draw_horizontal :: proc(app : ^App, container : ^Container, bounds : ^sdl.Rect) 
       y = bounds.h / 2,
     }
 
-    switch &c in component {
+    switch c in component {
       case Button: {
-        draw_button(app, &c, &bounds)
+        draw_button(app, c, &bounds)
       }
 
-      case Container: {
+      case List: {
         panic("Not Implemented")
       }
 

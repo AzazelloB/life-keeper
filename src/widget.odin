@@ -28,7 +28,15 @@ Padding :: struct {
 
 Color :: sdl.Color
 
-Component :: union { Container, Button, Text }
+Component :: union { List, Button, Text }
+
+Element :: union {
+  Window,
+  Widget,
+  List,
+  Button,
+  Text,
+}
 
 Text :: struct {
   text : string,
@@ -40,11 +48,12 @@ Button :: struct {
   padding : Padding,
   color : Color,
   animation_progress : f16,
-  component : union { Container, Text },
+  component : union { List, Text },
 }
 
-Container :: struct {
+List :: struct {
   type : enum { HORIZONTAL, VERTICAL },
+  // TODO: probably should be on widget
   padding : Padding,
   space : Pixel,
   color : Color,
@@ -63,15 +72,15 @@ Widget :: struct {
   component : Component,
 }
 
-Screen :: struct {
+Window :: struct {
   bounds : sdl.Rect,
   widgets : [dynamic]Widget,
 }
 
-get_layout :: proc(app : ^App, layout_allocator : mem.Allocator) -> Screen {
+get_layout :: proc(app : ^App, layout_allocator : mem.Allocator) -> Window {
   context.allocator = layout_allocator
 
-  return Screen {
+  return Window {
     bounds = { 0, 0, app.window_width, app.window_height },
     widgets = {
       {
@@ -79,7 +88,7 @@ get_layout :: proc(app : ^App, layout_allocator : mem.Allocator) -> Screen {
         // width = .3,
         height = 1,
         anchor = .LEFT_CENTER,
-        component = Container {
+        component = List {
           type = .VERTICAL,
           padding = { 15, 0, 15, 0 },
           space = 5,
